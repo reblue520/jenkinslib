@@ -42,6 +42,7 @@ pipeline{
 					script{
 						print("代码构建")
 						tools.PringMes("代码构建中...","green")
+						input id: 'Test', message: '是否继续', ok: '是否继续？', parameters: [choice(choices: ['a', 'b'], description: '', name: '选择项')], submitter: 'admin'
 					}
 				}
 			}
