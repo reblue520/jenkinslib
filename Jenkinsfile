@@ -40,7 +40,8 @@ pipeline{
 			steps{
 				timeout(time:20, unit:"MINUTES"){
 					script{
-						print("代码扫描")
+						print("代码构建")
+						tools.PringMes("代码构建中...","green")
 					}
 				}
 			}
