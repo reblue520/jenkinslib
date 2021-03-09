@@ -2,7 +2,7 @@
 
 @Library('jenkinslib') _
 
-def tools = new arg.devops.tools()
+def tools = new org.devops.tools()
 
 String workspace = "/data/www/.jenkins/workspace"
 
