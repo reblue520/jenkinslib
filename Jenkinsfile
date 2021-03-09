@@ -1,98 +1,91 @@
+
 #!groovy
 
-@Library('jenkinslib@main') _
+@Library{'jenkinslib'}
 
-//func from shareibrary
-def build = new org.devops.build()
-def tools = new org.devops.tools()
-def toemail = new org.devops.toemail()
+def tools = new arg.devops.tools()
 
+String workspace = "/data/www/.jenkins/workspace"
 
-//env
-String buildType = "${env.buildType}"
-String buildShell = "${env.buildShell}"
-String srcUrl = "${env.srcUrl}"
-String branchName = "${env.branchName}"
-
-userEmail = "2560350642@qq.com"
-
-
-//pipeline
+//Pipeline
 pipeline{
-    agent { node { label "build"}}
-    
-    
-    stages{
 
-        stage("CheckOut"){
-            steps{
-                script{
-                   
-                    
-                    println("${branchName}")
-                
-                    tools.PrintMes("获取代码","green")
-                    checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], 
-                                      doGenerateSubmoduleConfigurations: false, 
-                                      extensions: [], 
-                                      submoduleCfg: [], 
-                                      userRemoteConfigs: [[credentialsId: 'gitlab-admin-user', url: "${srcUrl}"]]])
+	agent {
+		node {	label "master"	// 运行代码的节点或者标签
+			customWorkspace "${workspace}" // 指顶运行工作目录
+		
+		}
+	}
+	
+	options {
+		timestamps() //日志会有时间
+		skipDefaultCheckout()
+		disableConcurrentBuilds() // 禁止并行
+		timeout(time: 1, unit: 'HOURS') // 流水线超时设置 1h
+	}
 
-                }
-            }
-        }
-        stage("Build"){
-            steps{
-                script{
-                
-                    tools.PrintMes("执行打包","green")
-                    build.Build(buildType,buildShell)
-                    
-                    
-                    
-                    //展示测试报告
-                    publishHTML([allowMissing: false, 
-                                 alwaysLinkToLastBuild: false, 
-                                 keepAll: false, 
-                                 reportDir: 'result/htmlfile', 
-                                 reportFiles: 'SummaryReport.html,DetailReport.html', 
-                                 reportName: 'InterfaceTestReport', 
-                                 reportTitles: ''])
-                }
-            }
-       }
-    }
-    post {
-        always{
-            script{
-                println("always")
-            }
-        }
-        
-        success{
-            script{
-                println("success")
-                toemail.Email("流水线成功",userEmail)
-            
-            }
-        
-        }
-        failure{
-            script{
-                println("failure")
-                toemail.Email("流水线失败了！",userEmail)
-            }
-        }
-        
-        aborted{
-            script{
-                println("aborted")
-                toemail.Email("流水线被取消了！",userEmail)
-            }
-        
-        }
-    
-    }
-    
-    
+	stages {
+		//下载代码
+		stage("GetCode"){
+			steps{
+				timeout(time:5, unit:"MINUTES"){  // 步骤超时时间
+					script{ // 填写运行代码
+						println('获取代码')
+					}
+				}
+			}
+		}
+
+		//构建
+		stage("Build"){
+			steps{
+				timeout(time:20, unit:"MINUTES"){
+					script{
+						print("代码扫描")
+					}
+				}
+			}
+		}
+
+		//代码扫描
+		stage("CodeScan"){
+			steps{
+				timeout(time:30, unit:"MINUTES"){
+					script{
+						print("代码扫描")
+					}
+				}
+			}
+		}
+
+	}
+
+
+	//构建后操作
+	post{
+		always{
+			script{
+				println("alwasy")
+			}
+		}
+
+		success{
+			script{
+				currentBuild.description += "\n 构建成功"
+			}
+		}
+
+		failure {
+			script{
+				currentBuild.description += "\n 构建失败"
+			}
+		}
+
+		aborted {
+			script{
+				currentBuild.description += "\n 构建取消"
+			}
+		}
+	}
+
 }
