@@ -1,12 +1,12 @@
 #!groovy
 
 pipeline{
-    agent { node { label "build"}}
+    agent { node { label "main"}}
     
     
     stages{
 
-        stage("CheckOut"){
+        stage("build"){
             steps{
                 script{
                    mvnHome = tools "M2"
