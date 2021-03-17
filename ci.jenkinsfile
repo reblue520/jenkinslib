@@ -1,8 +1,16 @@
 #!groovy
 
+String workspace = "/data/www/.jenkins/workspace"
+
+//Pipeline
 pipeline{
-    // agent { node { label "main"}}
-    
+
+	agent {
+		node {	label "master"	// 运行代码的节点或者标签
+			customWorkspace "${workspace}" // 指顶运行工作目录
+		
+		}
+	}
     
     stages{
 
