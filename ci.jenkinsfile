@@ -8,16 +8,27 @@ pipeline{
 	
 	}
     
-    stages{
+	    stages{
 
-        stage("build"){
-            steps{
-                script{
-                   mvnHome = tool "M2"
-		   sh {${mvnHome}/bin/mvn -v
+		stage("build"){
+		    steps{
+			script{
+			   mvnHome = tool "M2"
+			   sh {${mvnHome}/bin/mvn -v
+			}
+		    }
+		}
+			
+		stage("antbuild"){
+			steps{
+				script{
+					antHome = tool "ANT"
+					sh {
+						${antHome}/bin/ant -v
+					}
+				}
+			}
 		}
 	    }
 	}
-    }
-}
 }
