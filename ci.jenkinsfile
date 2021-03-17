@@ -6,7 +6,7 @@ String workspace = "/data/www/.jenkins/workspace"
 pipeline{
 
 	agent {
-		node {	label "master"	// 运行代码的节点或者标签
+		node {	label "main"	// 运行代码的节点或者标签
 			customWorkspace "${workspace}" // 指顶运行工作目录
 		
 		}
