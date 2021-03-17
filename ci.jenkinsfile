@@ -15,7 +15,7 @@ pipeline{
 				script{
 					mvnHome = tool "M2"
 					sh {
-						${mvnHome}/bin/mvn -v
+						"${mvnHome}/bin/mvn -v"
 					}
 				}
 			}
@@ -26,7 +26,7 @@ pipeline{
 				script{
 					antHome = tool "ANT"
 					sh {
-						${antHome}/bin/ant -v
+						"${antHome}/bin/ant -v"
 					}
 				}
 			}
