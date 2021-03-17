@@ -5,20 +5,22 @@ pipeline{
 
 	agent {
 		node {	label "master" }
-	
+
 	}
-    
-	    stages{
+
+	stages{
 
 		stage("mavenBuild"){
-		    steps{
-			script{
-			   mvnHome = tool "M2"
-			   sh {${mvnHome}/bin/mvn -v
+			steps{
+				script{
+					mvnHome = tool "M2"
+					sh {
+						${mvnHome}/bin/mvn -v
+					}
+				}
 			}
-		    }
 		}
-			
+
 		stage("antBuild"){
 			steps{
 				script{
@@ -29,6 +31,5 @@ pipeline{
 				}
 			}
 		}
-	    }
 	}
 }
