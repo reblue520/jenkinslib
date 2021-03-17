@@ -10,7 +10,7 @@ pipeline{
     
 	    stages{
 
-		stage("build"){
+		stage("mavenBuild"){
 		    steps{
 			script{
 			   mvnHome = tool "M2"
@@ -19,7 +19,7 @@ pipeline{
 		    }
 		}
 			
-		stage("antbuild"){
+		stage("antBuild"){
 			steps{
 				script{
 					antHome = tool "ANT"
